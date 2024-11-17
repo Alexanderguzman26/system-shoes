@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, MenuItem, Typography, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const Register = () => {
     password: '',
     confirmPassword: '',
   });
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
 
@@ -65,9 +67,8 @@ const Register = () => {
     const isValid = Object.keys(formData).every((field) => validateInput(field, formData[field]));
 
     if (!isValid) return;
-
     try {
-      const response = await fetch('http://localhost:8080/api/register', {
+      const response = await fetch('http://localhost:8080/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -76,7 +77,7 @@ const Register = () => {
       const data = await response.json();
       if (response.ok) {
         console.log('Registro exitoso:', data);
-        // Aquí puedes redirigir o mostrar un mensaje de éxito
+        navigate('/');
       } else {
         console.error('Error en el registro:', data.message);
       }

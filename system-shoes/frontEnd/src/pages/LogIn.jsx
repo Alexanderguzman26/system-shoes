@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/authContext/AuthContext';
 
 export default function LogIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const { login } = useAuth(); 
 
   const validateInput = (input, field) => {
-    // Validación básica: solo letras y números, mínimo 6 caracteres
     const regex = /^[a-zA-Z0-9]{6,}$/;
     if (!regex.test(input)) {
       setErrors((prevErrors) => ({
@@ -22,11 +25,9 @@ export default function LogIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateInput(username, 'username') || !validateInput(password, 'password')) {
       return;
     }
-
     try {
       const response = await fetch('http://localhost:8080/api/login', {
         method: 'POST',
@@ -37,7 +38,9 @@ export default function LogIn() {
       const data = await response.json();
       if (response.ok) {
         console.log('Inicio de sesión exitoso:', data);
-        // Aquí podrías redireccionar o manejar el inicio de sesión exitoso
+        // da acceso a las urls /register y /home
+        login(); 
+        navigate('/home');
       } else {
         console.error('Error en el inicio de sesión:', data.message);
       }
@@ -81,6 +84,15 @@ export default function LogIn() {
           Login
         </Button>
       </form>
+      <Box sx={{ marginTop: 24 }}>
+        ¿No tienes cuenta?{' '}
+        <span
+          onClick={() => navigate('/register')}
+          style={{ color: 'blue', cursor: 'pointer', textDecoration: 'None' }}
+        >
+          Regístrate
+        </span>
+      </Box>
     </Box>
   );
 };

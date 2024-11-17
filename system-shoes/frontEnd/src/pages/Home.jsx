@@ -1,7 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Grid, Card, CardMedia, CardContent, Button, Box } from '@mui/material';
 
-// Datos de ejemplo para los zapatos
 const shoesData = [
   {
     id: 1,

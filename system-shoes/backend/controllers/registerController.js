@@ -1,4 +1,4 @@
-const UserRepository = require('../repositories/userRepository');
+const UserRepository = require('../repository/userRepository');
 
 exports.register = async (req, res) => {
     try {

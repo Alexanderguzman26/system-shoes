@@ -1,24 +1,19 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const app = express();
 const port = 8080;
 
-// Middleware para servir archivos estáticos
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.use(express.static(path.join(__dirname, '../system-shoes-react/public')));
+const routes = require('../routes/routes');
 
-// Importar rutas
-const routes = require('./routes/routes');
-
+app.use(cors());
 app.use(express.json());
-// Usar las rutas
 app.use('/', routes);
-
-// Ruta para el frontend de React (React en modo producción)
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+  res.sendFile(path.join(__dirname, '../system-shoes-react/public/index.html'));
 });
-
-// Iniciar el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });

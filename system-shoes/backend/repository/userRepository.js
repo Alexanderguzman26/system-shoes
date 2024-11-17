@@ -5,7 +5,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'electiva',
+    database: 'system_shoes',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -14,15 +14,15 @@ const pool = mysql.createPool({
 const promisePool = pool.promise();
 
 class UserRepository {
-    async findByDocumentNumber(documentNumber) {
-        console.log(documentNumber)
-        const[rows]= await promisePool.query('SELECT * FROM users WHERE documentNumber = ?', [documentNumber]);
-        return rows.length > 0 ? rows[0] : null;
-
-    }
     async findByUsername(username) {
-            
-        return rows.length > 0 ? rows[0] : null;
+        try {
+            const [rows] = await promisePool.query('SELECT * FROM users WHERE username = ?', [username]);
+            return rows.length > 0 ? rows[0] : null;
+        } catch (error) {
+            console.error("Ocurrió un error en la consulta:", error.code);
+            console.error("Mensaje de error:", error.message);
+            throw error;
+        }
     }
     
     async registerUser(user) {
